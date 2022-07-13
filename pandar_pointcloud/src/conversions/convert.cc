@@ -22,6 +22,7 @@
 #include <pcl/point_types.h>
 #include <pcl_conversions/pcl_conversions.h>
 #include <ros/ros.h>
+#include <angles/angles.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <sys/syscall.h>
 #include <time.h>
@@ -958,6 +959,9 @@ void Convert::calcPointXYZIT(pandar_msgs::PandarPacket &packet, int cursor) {
 				point.x = xyDistance * m_fSinAllAngle[azimuthIdx];
 				point.y = xyDistance * m_fCosAllAngle[azimuthIdx];
 				point.z = distance * m_fSinAllAngle[pitchIdx];
+				point.distance = distance;
+				point.elevation = angles::from_degrees(pitch);
+				point.azimuth = angles::normalize_angle_positive(angles::from_degrees(azimuth));
 				point.intensity = unit.u8Intensity;
 				point.timestamp = unix_second + (static_cast<double>(pkt.tail.nTimestamp)) / 1000000.0;
 				point.timestamp = point.timestamp + m_objLaserOffset.getBlockTS(blockid, pkt.tail.nReturnMode, mode, pkt.head.u8LaserNum) / 1000000000.0 + offset / 1000000000.0;
@@ -1064,6 +1068,9 @@ void Convert::calcPointXYZIT(pandar_msgs::PandarPacket &packet, int cursor) {
         point.y = xyDistance * m_fCosAllAngle[azimuthIdx];
         point.z = distance * m_fSinAllAngle[pitchIdx];
 
+        point.distance = distance;
+        point.elevation = angles::from_degrees(pitch);
+        point.azimuth = angles::normalize_angle_positive(angles::from_degrees(azimuth));
         point.intensity = u8Intensity;
         point.timestamp =
             unix_second + (static_cast<double>(tail->nTimestamp)) / 1000000.0;
@@ -1241,6 +1248,9 @@ void Convert::calcQT128PointXYZIT(pandar_msgs::PandarPacket &packet, int cursor)
 			}
 
 
+      point.distance = distance;
+      point.elevation = angles::from_degrees(pitch);
+      point.azimuth = angles::normalize_angle_positive(angles::from_degrees(azimuth));
       point.intensity = u8Intensity;
       point.timestamp =
             unix_second + (static_cast<double>(tail->nTimestamp)) / 1000000.0;

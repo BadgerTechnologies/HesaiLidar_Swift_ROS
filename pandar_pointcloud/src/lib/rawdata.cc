@@ -252,11 +252,14 @@ void RawData::computeXYZIR(PPoint& point, int azimuth,
     double distanceM = laserReturn.range * 0.002;
 
     point.intensity = static_cast<float> (laserReturn.reflectivity >> 8);
+    point.elevation = angles::from_degrees(correction.verticalCorrection);
     if (distanceM < config_.min_range || distanceM > config_.max_range)
     {
         point.x = point.y = point.z = std::numeric_limits<float>::quiet_NaN ();
         return;
     }
+    double azimuthInRadians = angles::normalize_angle_positive(angles::from_degrees( (static_cast<double> (azimuth) / 100.0) + correction.azimuthCorrection));
+    point.azimuth = azimuthInRadians;
     if (correction.azimuthCorrection == 0)
     {
         cos_azimuth = cos_lookup_table_[azimuth];
@@ -264,12 +267,12 @@ void RawData::computeXYZIR(PPoint& point, int azimuth,
     }
     else
     {
-        double azimuthInRadians = angles::from_degrees( (static_cast<double> (azimuth) / 100.0) + correction.azimuthCorrection);
         cos_azimuth = std::cos (azimuthInRadians);
         sin_azimuth = std::sin (azimuthInRadians);
     }
 
     distanceM += correction.distanceCorrection;
+    point.distance = distanceM;
 
     double xyDistance = distanceM * correction.cosVertCorrection;
 
