@@ -238,6 +238,9 @@ bool PandarDriver::poll(void) {
     }
   }
 
+  /* CAM: this code is totally broken, no synchronization, no queueing, should
+   * really just directly publish.
+   * Comment out for now.
   int temp;
   temp = m_iScanPushIndex;
   m_iScanPushIndex = m_iScanPopIndex;
@@ -248,6 +251,7 @@ bool PandarDriver::poll(void) {
     ROS_WARN(
         "CPU not fast enough, data not published yet, new data "
         "comming!!!!!!!!!!!!!!");
+   */
   return true;
 }
 
