@@ -314,7 +314,7 @@ typedef struct PacketsBuffer_s {
 	}
   inline void creatNewTask() {
     if (m_buffers.end() == m_iterTaskEnd) {
-      ROS_WARN("creat new task end to start");
+//      ROS_WARN("creat new task end to start");
       m_iterTaskBegin = m_buffers.begin();
       m_iterTaskEnd = m_iterTaskBegin + m_stepSize;
     }
