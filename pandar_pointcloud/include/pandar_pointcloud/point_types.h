@@ -102,7 +102,7 @@ POINT_CLOUD_REGISTER_POINT_STRUCT(pandar_pointcloud::PointXYZITRDEA,
     (float, x, x)
     (float, y, y)
     (float, z, z)
-    (uint8_t, intensity, intensity)
+    (float, intensity, intensity)
     (double, timestamp, timestamp)
     (uint16_t, ring, ring)
     (float, distance, distance)
